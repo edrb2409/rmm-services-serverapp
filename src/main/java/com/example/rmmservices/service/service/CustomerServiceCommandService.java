@@ -22,6 +22,6 @@ public interface CustomerServiceCommandService {
      * @param customerId customer id
      * @param serviceId service id
      */
-    CustomerService deleteService(Long customerId, Long serviceId);
+    void deleteService(Long customerId, Long serviceId);
 
 }

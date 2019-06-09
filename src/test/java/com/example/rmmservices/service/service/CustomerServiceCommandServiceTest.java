@@ -9,7 +9,6 @@ import com.example.rmmservices.model.Service;
 import com.example.rmmservices.repository.CustomerRepository;
 import com.example.rmmservices.repository.CustomerServiceRepository;
 import com.example.rmmservices.repository.ServiceRepository;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,8 +55,8 @@ public class CustomerServiceCommandServiceTest {
         when(customerRepository.findById(1L)).thenReturn(Optional.of(systemCustomer()));
         when(serviceRepository.findById(1L)).thenReturn(Optional.of(antivirus()));
 
-        when(customerServiceRepository.removeByCustomer_IdAndAndService_Id(1L, 1L))
-            .thenReturn(expectedCustomerService());
+        when(customerServiceRepository.findByCustomer_IdAndAndService_Id(1L, 1L))
+            .thenReturn(Optional.of(expectedCustomerService()));
 
         service.deleteService(1L, 1L);
     }

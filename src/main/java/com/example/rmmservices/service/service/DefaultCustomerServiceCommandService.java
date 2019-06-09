@@ -9,7 +9,6 @@ import com.example.rmmservices.repository.CustomerRepository;
 import com.example.rmmservices.repository.CustomerServiceRepository;
 import com.example.rmmservices.repository.ServiceRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
@@ -53,8 +52,8 @@ public class DefaultCustomerServiceCommandService implements CustomerServiceComm
     }
 
     @Override
-    public CustomerService deleteService(Long customerId, Long serviceId) {
-        log.info("Removing a service {} into customer {}", serviceId, customerId);
+    public void deleteService(Long customerId, Long serviceId) {
+        log.info("Removing a service {} from customer {}", serviceId, customerId);
 
         customerRepository.findById(customerId)
                 .orElseThrow(CustomerNotFoundException::new);
@@ -62,6 +61,7 @@ public class DefaultCustomerServiceCommandService implements CustomerServiceComm
         serviceRepository.findById(serviceId)
                 .orElseThrow(ServiceNotFoundException::new);
 
-        return customerServiceRepository.removeByCustomer_IdAndAndService_Id(customerId, serviceId);
+        customerServiceRepository.findByCustomer_IdAndAndService_Id(customerId, serviceId)
+                .ifPresent(it -> customerServiceRepository.deleteById(it.getId()));
     }
 }
