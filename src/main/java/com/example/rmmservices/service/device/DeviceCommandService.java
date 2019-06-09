@@ -16,6 +16,7 @@ public interface DeviceCommandService {
      *
      * @return device saved
      *
+     * @throws com.example.rmmservices.exception.CustomerNotFoundException when customer is not found
      * @throws com.example.rmmservices.exception.DeviceTypeNotFoundException when the device type is not found
      */
     Device save(Device device);
@@ -28,6 +29,7 @@ public interface DeviceCommandService {
      *
      * @return device updated
      *
+     * @throws com.example.rmmservices.exception.CustomerNotFoundException when customer is not found
      * @throws com.example.rmmservices.exception.DeviceTypeNotFoundException when the device type is not found
      * @throws com.example.rmmservices.exception.DeviceNotFoundException when the device is not found
      */
@@ -35,12 +37,15 @@ public interface DeviceCommandService {
 
     /**
      * Delete a device
-     * @param id of the device
+     *
+     * @param customerId  customer id
+     * @param deviceId of the device
      *
      * @return device deleted
      *
+     * @throws com.example.rmmservices.exception.CustomerNotFoundException when customer is not found
      * @throws com.example.rmmservices.exception.DeviceNotFoundException when the device is not found
      */
-    Device delete(Long id);
+    Device delete(Long customerId, Long deviceId);
 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/devices")
+@RequestMapping("customers/{customerId}/devices")
 public class DeviceQueryController {
 
     private final DeviceQueryService service;
@@ -24,16 +24,16 @@ public class DeviceQueryController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DeviceDTO>> findAll() {
-        log.info("Find all devices");
+    public ResponseEntity<List<DeviceDTO>> findAll(@PathVariable Long customerId) {
+        log.info("Find all devices for customer: {}", customerId);
 
-        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.findAll()));
+        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.findAll(customerId)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DeviceDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<DeviceDTO> findById(@PathVariable Long customerId, @PathVariable Long id) {
         log.info("Getting device {}", id);
 
-        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.findBy(id)));
+        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.findBy(customerId, id)));
     }
 }

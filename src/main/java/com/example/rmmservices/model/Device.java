@@ -21,9 +21,9 @@ public class Device {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "devices_id_seq")
     private Long id;
 
-    @NotNull
-    @Column(name = "customer_id")
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     @NotNull
     @Column(name = "system_name")

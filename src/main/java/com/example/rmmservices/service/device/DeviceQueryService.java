@@ -10,21 +10,24 @@ import java.util.List;
 public interface DeviceQueryService {
 
     /**
-     * Find a device for its id
+     * Find a device for its id and customer
      *
-     * @param id device id
+     * @param customerId  customer id
+     * @param deviceId device id
      *
      * @return device found
      *
      * @throws com.example.rmmservices.exception.DeviceNotFoundException when the device is not found
      */
-    Device findBy(Long id);
+    Device findBy(Long customerId, Long deviceId);
 
     /**
-     * Find all devices
+     * Find all devices for a customer
+     *
+     * @param customerId customer id
      *
      * @return list of devices
      */
-    List<Device> findAll();
+    List<Device> findAll(Long customerId);
 
 }

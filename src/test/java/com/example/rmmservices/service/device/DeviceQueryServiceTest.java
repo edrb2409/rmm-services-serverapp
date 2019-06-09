@@ -1,6 +1,7 @@
 package com.example.rmmservices.service.device;
 
 import com.example.rmmservices.exception.DeviceNotFoundException;
+import com.example.rmmservices.model.Customer;
 import com.example.rmmservices.model.Device;
 import com.example.rmmservices.model.DeviceType;
 import com.example.rmmservices.repository.DeviceRepository;
@@ -29,28 +30,28 @@ public class DeviceQueryServiceTest {
     }
 
     @Test void shouldGetADeviceById() {
-        when(deviceRepository.findById(1L)).thenReturn(Optional.of(aDevice()));
+        when(deviceRepository.findByIdAndCustomer_Id(1L, 1L)).thenReturn(Optional.of(aDevice()));
 
-        assertEquals(1L, deviceQueryService.findBy(1L).getId().longValue());
+        assertEquals(1L, deviceQueryService.findBy(1L, 1L).getId().longValue());
     }
 
     @Test void shouldRaiseAnExceptionWhenDeviceIsNotFound() {
-        when(deviceRepository.findById(1L)).thenReturn(Optional.empty());
+        when(deviceRepository.findByIdAndCustomer_Id(1L, 1L)).thenReturn(Optional.empty());
 
         assertThrows(DeviceNotFoundException.class,
-                () -> deviceQueryService.findBy(1L));
+                () -> deviceQueryService.findBy(1L, 1L));
     }
 
     @Test void shouldGetDevices() {
-        when(deviceRepository.findAll()).thenReturn(devices());
+        when(deviceRepository.findAllByCustomer_Id(1L)).thenReturn(devices());
 
-        assertEquals(2, deviceQueryService.findAll().size());
+        assertEquals(2, deviceQueryService.findAll(1L).size());
     }
 
     @Test void shouldGetAnEmptyListIfDeviceTableIsEmpty() {
-        when(deviceRepository.findAll()).thenReturn(new ArrayList<>());
+        when(deviceRepository.findAllByCustomer_Id(1L)).thenReturn(new ArrayList<>());
 
-        assertTrue(deviceQueryService.findAll().isEmpty());
+        assertTrue(deviceQueryService.findAll(1L).isEmpty());
     }
 
     private Device aDevice() {
@@ -67,7 +68,7 @@ public class DeviceQueryServiceTest {
     private Device deviceFactory(String name) {
         return Device.builder()
                 .id(1L)
-                .customerId(1L)
+                .customer(Customer.builder().id(1L).build())
                 .systemName(name)
                 .deviceType(DeviceType.builder().id(1L).name("Mac").build())
                 .build();

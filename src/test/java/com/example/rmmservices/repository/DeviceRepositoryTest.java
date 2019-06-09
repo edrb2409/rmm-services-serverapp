@@ -1,5 +1,6 @@
 package com.example.rmmservices.repository;
 
+import com.example.rmmservices.model.Customer;
 import com.example.rmmservices.model.Device;
 import com.example.rmmservices.model.DeviceType;
 import org.junit.jupiter.api.Test;
@@ -23,14 +24,19 @@ public class DeviceRepositoryTest {
     @Autowired
     private DeviceRepository deviceRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @Autowired private DeviceTypeRepository deviceTypeRepository;
 
     @Test void shouldStoreADevice() {
         DeviceType macType = deviceTypeRepository.findByName("Mac")
                 .orElse(DeviceType.builder().name("Mac").build());
 
+        Customer customer = customerRepository.findAll().get(0);
+
         Device device = Device.builder()
-                .customerId(1L)
+                .customer(customer)
                 .systemName("Daniel-PC")
                 .deviceType(macType)
                 .build();

@@ -19,16 +19,16 @@ public class DefaultDeviceQueryService implements DeviceQueryService {
     }
 
     @Override
-    public Device findBy(Long id) {
-        log.info("Find by {}", id);
+    public Device findBy(Long customerId, Long deviceId) {
+        log.info("Find by {} and customer {}", deviceId, customerId);
 
-        return deviceRepository.findById(id)
+        return deviceRepository.findByIdAndCustomer_Id(deviceId, customerId)
                 .orElseThrow(DeviceNotFoundException::new);
     }
 
     @Override
-    public List<Device> findAll() {
-        log.info("Getting all devices");
-        return deviceRepository.findAll();
+    public List<Device> findAll(Long customerId) {
+        log.info("Getting all devices for {}", customerId);
+        return deviceRepository.findAllByCustomer_Id(customerId);
     }
 }

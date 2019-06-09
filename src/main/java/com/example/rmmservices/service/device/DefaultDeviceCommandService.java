@@ -1,9 +1,12 @@
 package com.example.rmmservices.service.device;
 
+import com.example.rmmservices.exception.CustomerNotFoundException;
 import com.example.rmmservices.exception.DeviceNotFoundException;
 import com.example.rmmservices.exception.DeviceTypeNotFoundException;
+import com.example.rmmservices.model.Customer;
 import com.example.rmmservices.model.Device;
 import com.example.rmmservices.model.DeviceType;
+import com.example.rmmservices.repository.CustomerRepository;
 import com.example.rmmservices.repository.DeviceRepository;
 import com.example.rmmservices.repository.DeviceTypeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,20 +20,29 @@ public class DefaultDeviceCommandService implements DeviceCommandService {
 
     private final DeviceTypeRepository deviceTypeRepository;
 
+    private final CustomerRepository customerRepository;
+
     public DefaultDeviceCommandService(DeviceRepository deviceRepository,
-                                       DeviceTypeRepository deviceTypeRepository) {
+                                       DeviceTypeRepository deviceTypeRepository,
+                                       CustomerRepository customerRepository) {
         this.deviceRepository = deviceRepository;
         this.deviceTypeRepository = deviceTypeRepository;
+        this.customerRepository = customerRepository;
     }
 
     @Override
     public Device save(Device device) {
         log.info("Saving device: {}", device);
 
+        Customer customer = customerRepository.findById(device.getCustomer().getId())
+                .orElseThrow(CustomerNotFoundException::new);
+
         DeviceType deviceType = deviceTypeRepository.findByName(device.getDeviceType().getName())
                 .orElseThrow(DeviceTypeNotFoundException::new);
 
+
         device.setDeviceType(deviceType);
+        device.setCustomer(customer);
 
         return deviceRepository.save(device);
     }
@@ -48,13 +60,16 @@ public class DefaultDeviceCommandService implements DeviceCommandService {
     }
 
     @Override
-    public Device delete(Long id) {
-        log.info("Deleting device: {}", id);
+    public Device delete(Long customerId, Long deviceId) {
+        log.info("Deleting device: {}", deviceId);
 
-        Device device = deviceRepository.findById(id)
+        customerRepository.findById(customerId)
+                .orElseThrow(CustomerNotFoundException::new);
+
+        Device device = deviceRepository.findById(deviceId)
                 .orElseThrow(DeviceNotFoundException::new);
 
-        deviceRepository.deleteById(id);
+        deviceRepository.deleteById(deviceId);
 
         return device;
     }

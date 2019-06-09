@@ -1,5 +1,6 @@
 package com.example.rmmservices.controller.device.mapper;
 
+import com.example.rmmservices.model.Customer;
 import com.example.rmmservices.model.Device;
 import com.example.rmmservices.model.DeviceType;
 import com.example.rmmservices.model.dto.DeviceDTO;
@@ -13,9 +14,9 @@ public final class DeviceMapper {
 
     private DeviceMapper() { }
 
-    public static Device toDevice(DeviceDTO deviceDTO) {
+    public static Device toDevice(Long customerId, DeviceDTO deviceDTO) {
         return Device.builder()
-                .customerId(deviceDTO.getCustomerId())
+                .customer(Customer.builder().id(customerId).build())
                 .systemName(deviceDTO.getSystemName())
                 .deviceType(DeviceType.builder().name(deviceDTO.getDeviceType()).build())
                 .build();
@@ -23,7 +24,6 @@ public final class DeviceMapper {
 
     public static DeviceDTO toDeviceDTO(Device device) {
         return DeviceDTO.builder()
-                .customerId(device.getCustomerId())
                 .id(device.getId())
                 .deviceType(device.getDeviceType().getName())
                 .systemName(device.getSystemName())

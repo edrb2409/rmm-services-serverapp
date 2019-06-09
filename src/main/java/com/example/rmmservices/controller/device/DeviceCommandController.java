@@ -11,7 +11,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/devices")
+@RequestMapping("customers/{customerId}/devices")
 public class DeviceCommandController {
 
     private final DeviceCommandService service;
@@ -21,24 +21,28 @@ public class DeviceCommandController {
     }
 
     @PostMapping
-    public ResponseEntity<DeviceDTO> createDevice(@Valid @RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<DeviceDTO> createDevice(@PathVariable Long customerId,
+                                                  @Valid @RequestBody DeviceDTO deviceDTO) {
         log.info("Device: {}", deviceDTO);
 
         return ResponseEntity.ok(DeviceMapper.toDeviceDTO(
-                service.save(DeviceMapper.toDevice(deviceDTO))));
+                service.save(DeviceMapper.toDevice(customerId, deviceDTO))));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DeviceDTO> updateDevice(@PathVariable Long id, @Valid @RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<DeviceDTO> updateDevice(@PathVariable Long customerId,
+                                                  @PathVariable Long id,
+                                                  @Valid @RequestBody DeviceDTO deviceDTO) {
         log.info("Update device: {}, {}", id, deviceDTO );
 
-        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.update(id, DeviceMapper.toDevice(deviceDTO))));
+        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.update(id, DeviceMapper.toDevice(customerId, deviceDTO))));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DeviceDTO> deleteDevice(@PathVariable Long id) {
+    public ResponseEntity<DeviceDTO> deleteDevice(@PathVariable Long customerId,
+                                                  @PathVariable Long id) {
         log.info("Delete device {}", id);
 
-        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.delete(id)));
+        return ResponseEntity.ok(DeviceMapper.toDeviceDTO(service.delete(customerId, id)));
     }
 }
