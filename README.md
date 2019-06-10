@@ -2,6 +2,11 @@
 
 Store devices and services for a customer and calculates monthly cost operations.
 
+Basic Authentication:
+
+    user: admin
+    password: password
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project.
@@ -10,7 +15,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Java 11
 - Lombok
-- Postgresql (services and test services_test)
+- Postgresql (create this database **services** and **services_test**)
 
 ### Installing
 
@@ -46,6 +51,21 @@ Compile the project and then:
 ```
 java -jar build/libs/rmm-services-0.0.1-SNAPSHOT.jar
 ```
+
+## Customization
+
+For customization you can add environment variables according to:
+
+| Name  | Description  | Default  |
+|--------|-------------|----------|
+| PG_HOST | Postgres Hostname | `localhost` |
+| PG_DATABASE | Postgres Database Name | production: `services` test: `services_test` |
+| PG_USERNAME | Postgres username | `postgres` |
+| PG_PASSWORD | Postgres Password | `postgres` |
+
+
+
+
 
 ## Build With
 
