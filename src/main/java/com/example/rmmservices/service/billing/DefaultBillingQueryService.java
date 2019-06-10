@@ -58,7 +58,5 @@ public class DefaultBillingQueryService implements BillingQueryService {
                 })
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
-
-        //return BigDecimal.ZERO;
     }
 }
