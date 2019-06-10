@@ -21,7 +21,7 @@ public class ServiceCostPerDeviceType {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
+    @JoinColumn(name = "service_id")
     private Service service;
 
     @ManyToOne
